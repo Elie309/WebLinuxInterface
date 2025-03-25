@@ -1,18 +1,23 @@
 <?php 
 
-
-namespace App\Validations;
+namespace App\Validation;
 
 use CodeIgniter\Validation\Rules;
 
 class BooleanRule extends Rules
 {
     /**
-     * @param array|bool|float|int|object|string|null $str
+     * Checks if the value is a valid boolean representation
+     * 
+     * @param string|null $str Value to check
+     * 
+     * @return bool
      */
     public function boolean($str): bool
     {
-        return in_array($str, [1, 0, '0', '1', 'true', 'false', 'on', 'off', 'yes', 'no', true, false], true);
-
+        if ($str === null) {
+            return false;
+        }
+        return filter_var($str, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null;
     }
 }
