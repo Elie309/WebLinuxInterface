@@ -1,68 +1,97 @@
-# CodeIgniter 4 Application Starter
+# Web Linux Interface
 
-## What is CodeIgniter?
+A web-based interface for managing and interacting with Ubuntu Linux systems remotely. Built with CodeIgniter PHP framework.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## Overview
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Web Linux Interface provides a user-friendly web interface that allows users to manage their Ubuntu Linux systems through a browser. This eliminates the need for direct terminal access while still providing powerful system management capabilities. The application is built using CodeIgniter PHP framework with Composer for dependency management and Tailwind CSS for styling.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## Features
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+- Remote system management through a web browser
+- File management (browse, upload, download, edit)
+- Process monitoring and management
+- User and permission management
+- System resource monitoring
+- Terminal emulation
+- Task scheduling
+- Software installation and updates
 
-## Installation & updates
+## Installation
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+### Prerequisites
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+- Ubuntu Linux (18.04 LTS or newer recommended)
+- PHP 8.3.7
+- Composer (PHP dependency manager)
+- CodeIgniter 4.x
+- npm (For Tailwind CSS only)
+- Modern web browser
 
-## Setup
+### Setup
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Elie309/WebLinuxInterface.git
+   cd WebLinuxInterface
+   ```
 
-## Important Change with index.php
+2. Install PHP dependencies with Composer:
+   ```bash
+   composer install
+   ```
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+3. Install and build Tailwind CSS:
+   ```bash
+   npm install
+   npm run build-css
+   ```
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+4. Configure CodeIgniter:
+   ```bash
+   cp env .env
+   # Edit .env with your database and other configurations
+   ```
 
-**Please** read the user guide for a better explanation of how CI4 works!
+5. Start the server:
+   ```bash
+   php spark serve
+   # or use your preferred web server (Apache, Nginx)
+   ```
 
-## Repository Management
+6. Access the interface at `http://localhost:8080` (default CodeIgniter port)
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+## Usage
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+1. Log in with your system credentials
+2. Navigate through the dashboard to access different management features
+3. Use the built-in terminal for direct command execution
+4. Monitor system resources and processes in real-time
 
-## Server Requirements
+## Security Considerations
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+- It's recommended to use HTTPS for secure connections
+- Set up proper authentication and access controls
+- Limit access to trusted networks
+- Regularly update the application and dependencies
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+## Contributing
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+## License
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+**OPEN LICENSE**
+
+This project is available for free use with the following conditions:
+- Do not sell this software or any derivative works
+- Can be used for personal use
+- Modification and redistribution is allowed as long as original attribution is maintained
+
+## Author
+
+- **Elie309 (Elie Saade)**
+
+## Support
+
+For issues, feature requests, or questions, please open an issue on the GitHub repository.
