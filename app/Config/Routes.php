@@ -10,3 +10,5 @@ $routes->get('/', 'Home::index');
 // Auth
 $routes->get('login', 'Auth\AuthController::index');
 $routes->post('auth/login', 'Auth\AuthController::login');
+
+$routes->get('dashboard', 'Dashboard\DashboardController::index');
