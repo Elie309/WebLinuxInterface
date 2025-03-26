@@ -5,15 +5,18 @@ namespace App\Controllers\Dashboard;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Services\SystemMonitor;
+use App\Services\ServicesManager;
 
 class DashboardController extends BaseController
 {
     protected $navItems;
     protected $systemMonitor;
+    protected $servicesManager;
 
     public function __construct()
     {
         $this->systemMonitor = new SystemMonitor();
+        $this->servicesManager = new ServicesManager();
         
         $this->navItems = [
             [
@@ -22,13 +25,21 @@ class DashboardController extends BaseController
                 'icon' => '<svg class="mr-3 h-6 w-6 text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                         </svg>',
-                'active' => true
+                'active' => false
             ],
             [
                 'title' => 'Servers',
                 'url' => base_url('dashboard/servers'),
                 'icon' => '<svg class="mr-3 h-6 w-6 text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                        </svg>',
+                'active' => false
+            ],
+            [
+                'title' => 'Services',
+                'url' => base_url('dashboard/services'),
+                'icon' => '<svg class="mr-3 h-6 w-6 text-indigo-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>',
                 'active' => false
             ],
@@ -62,6 +73,9 @@ class DashboardController extends BaseController
 
     public function index()
     {
+        // Set active nav item
+        $this->setActiveNavItem('Dashboard');
+        
         // Get initial system metrics
         $metrics = $this->systemMonitor->getAllMetrics();
         
@@ -73,5 +87,58 @@ class DashboardController extends BaseController
         ];
         
         return view('dashboard/index', $data);
+    }
+    
+    public function services()
+    {
+        // Set active nav item
+        $this->setActiveNavItem('Services');
+        
+        // Get initial services list
+        $services = $this->servicesManager->getServices();
+        
+        $data = [
+            'title' => 'Services - Web Linux Interface',
+            'navItems' => $this->navItems,
+            'services' => $services,
+            'websocketPort' => 8000
+        ];
+        
+        return view('dashboard/services/index', $data);
+    }
+    
+    public function serviceDetails($serviceName = '')
+    {
+        // Set active nav item
+        $this->setActiveNavItem('Services');
+        
+        if (empty($serviceName)) {
+            return redirect()->to(base_url('dashboard/services'));
+        }
+        
+        // Get service details
+        $details = $this->servicesManager->getServiceDetails($serviceName);
+        
+        $data = [
+            'title' => $serviceName . ' - Service Details',
+            'navItems' => $this->navItems,
+            'serviceName' => $serviceName,
+            'details' => $details,
+            'websocketPort' => 8000
+        ];
+        
+        return view('dashboard/services/details', $data);
+    }
+    
+    /**
+     * Set the active navigation item
+     * 
+     * @param string $activeItem The title of the active item
+     */
+    private function setActiveNavItem(string $activeItem)
+    {
+        foreach ($this->navItems as &$item) {
+            $item['active'] = ($item['title'] === $activeItem);
+        }
     }
 }

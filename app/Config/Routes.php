@@ -11,4 +11,10 @@ $routes->get('/', 'Home::index');
 $routes->get('login', 'Auth\AuthController::index');
 $routes->post('auth/login', 'Auth\AuthController::login');
 
-$routes->get('dashboard', 'Dashboard\DashboardController::index');
+// Dashboard routes
+$routes->group('dashboard', static function ($routes) {
+    $routes->get('/', 'Dashboard\DashboardController::index');
+    $routes->get('services', 'Dashboard\DashboardController::services');
+    $routes->get('services/(:segment)', 'Dashboard\DashboardController::serviceDetails/$1');
+    // ...other existing dashboard routes...
+});
