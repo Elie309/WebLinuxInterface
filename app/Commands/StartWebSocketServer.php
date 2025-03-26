@@ -16,10 +16,17 @@ class StartWebSocketServer extends BaseCommand
     protected $group       = 'WebLinuxInterface';
     protected $name        = 'websocket:start';
     protected $description = 'Starts the WebSocket server for real-time system monitoring';
+    protected $usage       = 'websocket:start [options]';
+    protected $options     = [
+        '--port' => 'Port to run the WebSocket server on (default: 8000)'
+    ];
 
     public function run(array $params)
     {
         CLI::write('Starting WebSocket server...', 'green');
+        
+        // Check for port parameter
+        $port = $params['port'] ?? CLI::getOption('port') ?? 8000;
         
         // Create event loop
         $loop = LoopFactory::create();
@@ -28,7 +35,7 @@ class StartWebSocketServer extends BaseCommand
         $webSocketServer = new WebSocketServer();
         
         // Create socket server
-        $socket = new SocketServer('0.0.0.0:8000', $loop);
+        $socket = new SocketServer("0.0.0.0:{$port}", $loop);
         
         // Create HTTP/WebSocket server
         $server = new IoServer(
@@ -44,7 +51,7 @@ class StartWebSocketServer extends BaseCommand
             $webSocketServer->broadcastMetrics();
         });
         
-        CLI::write('WebSocket server running on port 8000', 'green');
+        CLI::write("WebSocket server running on port {$port}", 'green');
         CLI::write('Press Ctrl+C to stop the server', 'yellow');
         
         // Start the server
