@@ -2,14 +2,20 @@
 
 <?= $this->section('content') ?>
 
-<div class="py-6">
+<div class="py-6" id="dashboard-metrics" data-ws-port="<?= $websocketPort ?>">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+            <span id="connection-status" class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                Connecting...
+            </span>
+        </div>
     </div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         <div class="py-4">
             <!-- Server Stats -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <!-- CPU Usage -->
                 <div class="bg-white overflow-hidden shadow rounded-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <div class="flex items-center">
@@ -22,14 +28,20 @@
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">CPU Usage</dt>
                                     <dd class="flex items-baseline">
-                                        <div class="text-2xl font-semibold text-gray-900">25%</div>
+                                        <div class="text-2xl font-semibold text-gray-900" id="cpu-usage"><?= $metrics['cpu'] ?>%</div>
                                     </dd>
                                 </dl>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div id="cpu-progress" class="bg-indigo-600 h-2.5 rounded-full" style="width: <?= $metrics['cpu'] ?>%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Memory Usage -->
                 <div class="bg-white overflow-hidden shadow rounded-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <div class="flex items-center">
@@ -42,14 +54,21 @@
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Memory Usage</dt>
                                     <dd class="flex items-baseline">
-                                        <div class="text-2xl font-semibold text-gray-900">2.5 GB / 8 GB</div>
+                                        <div class="text-2xl font-semibold text-gray-900" id="memory-usage"><?= $metrics['memory']['used'] ?> / <?= $metrics['memory']['total'] ?></div>
                                     </dd>
                                 </dl>
                             </div>
                         </div>
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div id="memory-progress" class="bg-indigo-600 h-2.5 rounded-full" style="width: <?= $metrics['memory']['percent_used'] ?>%"></div>
+                            </div>
+                            <div class="text-right text-xs mt-1 text-gray-500" id="memory-percent"><?= $metrics['memory']['percent_used'] ?>%</div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Disk Usage -->
                 <div class="bg-white overflow-hidden shadow rounded-lg">
                     <div class="px-4 py-5 sm:p-6">
                         <div class="flex items-center">
@@ -62,10 +81,16 @@
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Disk Usage</dt>
                                     <dd class="flex items-baseline">
-                                        <div class="text-2xl font-semibold text-gray-900">45%</div>
+                                        <div class="text-2xl font-semibold text-gray-900" id="disk-usage"><?= $metrics['disk']['percent_used'] ?>%</div>
                                     </dd>
                                 </dl>
                             </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div id="disk-progress" class="bg-indigo-600 h-2.5 rounded-full" style="width: <?= $metrics['disk']['percent_used'] ?>%"></div>
+                            </div>
+                            <div class="text-right text-xs mt-1 text-gray-500" id="disk-details"><?= $metrics['disk']['used'] ?> / <?= $metrics['disk']['total'] ?></div>
                         </div>
                     </div>
                 </div>
@@ -164,5 +189,8 @@
         </div>
     </div>
 </div>
+
+<!-- Include the dashboard JavaScript file -->
+<script src="<?= base_url('js/dashboard.js') ?>"></script>
 
 <?= $this->endSection() ?>
